@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import socket
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'catalog',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +52,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+# Di Docker, request dari browser host masuk lewat gateway network container,
+# jadi IP gateway perlu ditambahkan supaya Debug Toolbar bisa muncul.
+_, _, container_ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = ['127.0.0.1'] + [ip.rsplit('.', 1)[0] + '.1' for ip in container_ips]
 
 ROOT_URLCONF = 'config.urls'
 
@@ -83,6 +91,13 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': 'db',
         'PORT': '5432',
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
     }
 }
 
