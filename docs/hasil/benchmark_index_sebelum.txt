@@ -1,0 +1,35 @@
+root@DESKTOP-O4RN40G:/mnt/c/Users/User/tugasModul5# docker compose exec app python manage.py benchmark_index
+Course=10005 | Index (is_active, title): BELUM ADA | Waktu = median 50 kali jalan
+is_active=True, title='Performance Course 5000' -> 0 baris
+Sort  (cost=239.07..239.08 rows=1 width=58) (actual time=0.296..0.296 rows=0 loops=1)
+  Sort Key: code
+  Sort Method: quicksort  Memory: 25kB
+  ->  Seq Scan on catalog_course  (cost=0.00..239.06 rows=1 width=58) (actual time=0.295..0.295 rows=0 loops=1)
+        Filter: (is_active AND ((title)::text = 'Performance Course 5000'::text))
+        Rows Removed by Filter: 10005
+Planning Time: 0.025 ms
+Execution Time: 0.302 ms
+Median: execution 0.303 ms, planning 0.025 ms, lewat ORM 0.672 ms
+is_active=True, title='Performance Course 5001' -> 1 baris
+Sort  (cost=239.07..239.08 rows=1 width=58) (actual time=0.312..0.313 rows=1 loops=1)
+  Sort Key: code
+  Sort Method: quicksort  Memory: 25kB
+  ->  Seq Scan on catalog_course  (cost=0.00..239.06 rows=1 width=58) (actual time=0.158..0.311 rows=1 loops=1)
+        Filter: (is_active AND ((title)::text = 'Performance Course 5001'::text))
+        Rows Removed by Filter: 10004
+Planning Time: 0.027 ms
+Execution Time: 0.318 ms
+Median: execution 0.312 ms, planning 0.026 ms, lewat ORM 0.696 ms
+title='Performance Course 5001' (tanpa is_active) -> 1 baris
+Sort  (cost=239.07..239.08 rows=1 width=58) (actual time=0.263..0.263 rows=1 loops=1)
+  Sort Key: code
+  Sort Method: quicksort  Memory: 25kB
+  ->  Seq Scan on catalog_course  (cost=0.00..239.06 rows=1 width=58) (actual time=0.128..0.261 rows=1 loops=1)
+        Filter: ((title)::text = 'Performance Course 5001'::text)
+        Rows Removed by Filter: 10004
+Planning Time: 0.022 ms
+Execution Time: 0.269 ms
+Median: execution 0.283 ms, planning 0.024 ms, lewat ORM 0.659 ms
+Ukuran tabel: 912 kB, total index: 984 kB
+INSERT 1000 Course (rollback): 14.91 ms
+root@DESKTOP-O4RN40G:/mnt/c/Users/User/tugasModul5# 

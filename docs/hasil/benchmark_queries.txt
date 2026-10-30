@@ -1,0 +1,9 @@
+root@DESKTOP-O4RN40G:/mnt/c/Users/User/tugasModul5# docker compose exec app python manage.py benchmark_queries
+Dataset: Course=10005, Lecturer=6, Student=51, Lesson=503, Enrollment=1001, Assignment=202, Submission=1002
+Waktu = median dari 10 kali jalan (ms)
+Skenario              Data  Q before  Q after   ms before   ms after  Improvement
+Course + Lecturer      100       101        1       38.78       1.56        96.0%
+Course + Lesson         50        51        2       26.38       2.86        89.2%
+Course + Lecturer     1000      1001        1      389.14      10.95        97.2%
+Course + Lecturer    10000     10001        1     4081.65     130.05        96.8%
+root@DESKTOP-O4RN40G:/mnt/c/Users/User/tugasModul5# 
