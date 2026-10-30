@@ -45,4 +45,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(Assignment)
+@admin.register(Assignment)
+class AssignmentAdmin(admin.ModelAdmin):
+    # __str__ memakai course.code, tanpa ini halaman list kena N+1
+    list_select_related = ("course",)

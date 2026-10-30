@@ -22,9 +22,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ulang = options["ulang"]
 
-        # Statistik diperbarui dulu supaya kondisi before dan after sama
+        # Tabel dipadatkan dan statistik diperbarui dulu supaya kondisi
+        # before dan after sama, termasuk sisa uji INSERT yang di-rollback
         with connection.cursor() as cursor:
-            cursor.execute("VACUUM ANALYZE catalog_course")
+            cursor.execute("VACUUM FULL ANALYZE catalog_course")
             constraints = connection.introspection.get_constraints(cursor, "catalog_course")
 
         ada_index = any(
@@ -93,7 +94,7 @@ class Command(BaseCommand):
                 transaction.set_rollback(True)
 
         with connection.cursor() as cursor:
-            cursor.execute("VACUUM ANALYZE catalog_course")
+            cursor.execute("VACUUM FULL ANALYZE catalog_course")
 
         self.stdout.write(f"Ukuran tabel: {ukuran_tabel}, total index: {ukuran_index}")
         self.stdout.write(f"INSERT 1000 Course (rollback): {statistics.median(waktu):.2f} ms")
